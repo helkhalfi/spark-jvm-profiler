@@ -15,12 +15,25 @@ public abstract class Profiler {
     public static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = new Class<?>[]{Reporter.class, Arguments.class};
 
     private final Reporter<?> reporter;
+    // CONTAINER_ID=container_1486158130664_0002_01_000157
+    private String[] tags = {};
 
     private long recordedStats = 0;
     public Profiler(Reporter reporter, Arguments arguments) {
         Preconditions.checkNotNull(reporter);
         this.reporter = reporter;
         handleArguments(arguments);
+
+        String containerId = System.getenv("CONTAINER_ID");
+        if (containerId != null) {
+            String applicationId = getApplicationId(containerId);
+            tags = new String[]{"container_id:" + containerId, "application_id:" + applicationId};
+        }
+    }
+
+    public static String getApplicationId(String containerId) {
+        String[] parts = containerId.replace("container_", "").split("_");
+        return "application_" + parts[0] + "_" + parts[1];
     }
 
     /**
@@ -92,7 +105,7 @@ public abstract class Profiler {
      */
     protected void recordGaugeValues(Map<String, ? extends Number> gauges) {
         recordedStats++;
-        reporter.recordGaugeValues(gauges);
+        reporter.recordGaugeValues(gauges, tags);
     }
 
     public long getRecordedStats() { return recordedStats; }

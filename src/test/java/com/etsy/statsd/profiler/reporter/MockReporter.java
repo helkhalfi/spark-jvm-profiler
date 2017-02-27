@@ -21,12 +21,12 @@ public class MockReporter extends Reporter<String> {
     }
 
     @Override
-    public void recordGaugeValue(String key, long value) {
+    public void recordGaugeValue(String key, long value, String... tags) {
         MapUtil.setOrIncrementMap(output, key, value);
     }
 
     @Override
-    public void recordGaugeValues(Map<String, ? extends Number> gauges) {
+    public void recordGaugeValues(Map<String, ? extends Number> gauges, String... tags) {
         for (Map.Entry<String, ? extends Number> gauge : gauges.entrySet()) {
             if (gauge.getValue() instanceof Long) {
                 recordGaugeValue(gauge.getKey(), gauge.getValue().longValue());
@@ -39,7 +39,7 @@ public class MockReporter extends Reporter<String> {
     }
 
     @Override
-    public void recordGaugeValue(String key, double value) {
+    public void recordGaugeValue(String key, double value, String... tags) {
         MapUtil.setOrIncrementMap(output, key, value);
     }
 

@@ -39,4 +39,11 @@ public class ProfilerTest {
             protected void handleArguments(Arguments arguments) { }
         };
     }
+
+    @Test
+    public void testGetApplicationId() {
+        String containerId = "container_1486158130664_0002_01_000157";
+        String applicationId = MockProfilerWithArguments.getApplicationId(containerId);
+        assertEquals(applicationId, "application_1486158130664_0002");
+    }
 }
