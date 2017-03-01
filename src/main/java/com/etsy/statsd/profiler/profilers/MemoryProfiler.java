@@ -5,12 +5,16 @@ import com.etsy.statsd.profiler.Profiler;
 import com.etsy.statsd.profiler.reporter.Reporter;
 import com.google.common.collect.Maps;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.management.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 
 /**
  * Profiles memory usage and GC statistics
@@ -18,13 +22,16 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Andrew Johnson
  */
 public class MemoryProfiler extends Profiler {
-    public static final long PERIOD = 10;
+    private static final Logger LOGGER = Logger.getLogger(MemoryProfiler.class.getName());
+
+    private static final long PERIOD = 10;
 
     private final MemoryMXBean memoryMXBean;
     private final List<GarbageCollectorMXBean> gcMXBeans;
     private final HashMap<GarbageCollectorMXBean, AtomicLong> gcTimes = new HashMap<>();
     private final ClassLoadingMXBean classLoadingMXBean;
     private final List<MemoryPoolMXBean> memoryPoolMXBeans;
+    private final Integer pid;
 
     public MemoryProfiler(Reporter reporter, Arguments arguments) {
         super(reporter, arguments);
@@ -36,6 +43,10 @@ public class MemoryProfiler extends Profiler {
         for (GarbageCollectorMXBean b : gcMXBeans) {
             gcTimes.put(b, new AtomicLong());
         }
+
+        String processName = ManagementFactory.getRuntimeMXBean().getName();
+        pid = Integer.parseInt(processName.split("@")[0]);
+        LOGGER.info("Process id: " + pid);
     }
 
     /**
@@ -109,8 +120,29 @@ public class MemoryProfiler extends Profiler {
 
             recordMemoryUsage(prefix, usage, metrics);
         }
+
+        try {
+            Process process = Runtime.getRuntime().exec("cat /proc/" + pid + "/status");
+            process.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("VmRSS:")) {
+                    metrics.put("process.rss", getRssMemory(line));
+                    break;
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            LOGGER.severe(e.getMessage());
+        }
         
         recordGaugeValues(metrics);
+    }
+
+    static long getRssMemory(String line) {
+        return 1024 * Long.parseLong(
+            line.replace("VmRSS:", "").replace(" kB", "").replace(" ", "").replace("\t", "")
+        );
     }
 
     /**
