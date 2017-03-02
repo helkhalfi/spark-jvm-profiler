@@ -1,4 +1,4 @@
-# spark-jvm-profiler [![Build Status](https://travis-ci.org/datadog/spark-jvm-profiler.svg)](https://travis-ci.org/datadog/spark-jvm-profiler)
+# spark-jvm-profiler [![Build Status](https://travis-ci.org/DataDog/spark-jvm-profiler.svg)](https://travis-ci.org/DataDog/spark-jvm-profiler)
 
 spark-jvm-profiler is a JVM agent profiler that sends profiling data to StatsD.  Inspired by [riemann-jvm-profiler](https://github.com/riemann/riemann-jvm-profiler), it was primarily built for profiling Hadoop jobs, but can be used with any JVM process.
 
@@ -43,7 +43,7 @@ The profiler is enabled using the JVM's `-javaagent` argument.  You are required
 
 You should use the uberjar when starting the profiler in this manner so that all the profiler's dependencies are available.
 
-The profiler can also be loaded dynamically (after the JVM has already started), but this technique requires relying on Sun's `tools.jar`, meaning it's an implementation-specific solution that might not work for all JVMs. For more information see the [Dynamic Loading section](#dynamic-loading-of-agent). 
+The profiler can also be loaded dynamically (after the JVM has already started), but this technique requires relying on Sun's `tools.jar`, meaning it's an implementation-specific solution that might not work for all JVMs. For more information see the [Dynamic Loading section](#dynamic-loading-of-agent).
 
 An example of setting up Cascading/Scalding jobs to use the profiler can be found in the `example` directory.
 
@@ -65,7 +65,7 @@ httpPort         | The port on which to bind the embedded HTTP server (optional,
 statsd-jvm-profiler embeds an HTTP server to support simple interactions with the profiler while it is in operation.
 You can configure the port on which this server runs with the `httpPort` option.
 You can disable it altogether using the `httpServerEnabled=false` argument.
- 
+
 Endpoint                    | Usage
 ---------------             | -----
 /profilers                  | List the currently enabled profilers
@@ -162,7 +162,7 @@ Important notes:
 ## Dynamic Loading of Agent
 
 1. Make sure you have the `tools.jar` available in your classpath during compilation and runtime. This JAR is usually found in the JAVA_HOME directory under the `/lib` folder for Oracle Java installations.
-2. Make sure the `jvm-profiler` JAR is available during runtime. 
+2. Make sure the `jvm-profiler` JAR is available during runtime.
 3. During your application boostrap process, do the following:
 
 ```scala
