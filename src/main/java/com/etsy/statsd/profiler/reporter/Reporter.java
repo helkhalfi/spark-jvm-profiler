@@ -30,12 +30,12 @@ public abstract class Reporter<T> {
      * @param key The name of the gauge
      * @param value The value of the gauge
      */
-    public abstract void recordGaugeValue(String key, long value);
+    public abstract void recordGaugeValue(String key, long value, String... tags);
 
   /**
    * @see #recordGaugeValue(String, long)
    */
-    public abstract void recordGaugeValue(String key, double value);
+    public abstract void recordGaugeValue(String key, double value, String... tags);
 
     /**
      * Record multiple gauge values
@@ -43,7 +43,7 @@ public abstract class Reporter<T> {
      *
      * @param gauges A map of gauge names to values
      */
-    public abstract void recordGaugeValues(Map<String, ? extends Number> gauges);
+    public abstract void recordGaugeValues(Map<String, ? extends Number> gauges, String... tags);
 
     /**
      * CPUTracingProfiler can emit some metrics that indicate the upper and lower bound on the length of stack traces

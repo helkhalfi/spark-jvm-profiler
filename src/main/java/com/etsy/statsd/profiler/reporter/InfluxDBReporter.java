@@ -45,16 +45,16 @@ public class InfluxDBReporter extends Reporter<InfluxDB> {
      * @param value The value of the gauge
      */
     @Override
-    public void recordGaugeValue(String key, long value) {
+    public void recordGaugeValue(String key, long value, String... tags) {
         Map<String, Long> gauges = ImmutableMap.of(key, value);
         recordGaugeValues(gauges);
     }
 
   /**
-   * @see #recordGaugeValue(String, long)
+   * @see #recordGaugeValue(String, long, String...)
    */
     @Override
-    public void recordGaugeValue(String key, double value) {
+    public void recordGaugeValue(String key, double value, String... tags) {
         Map<String, ? extends Number> gauges = ImmutableMap.of(key, value);
         recordGaugeValues(gauges);
     }
@@ -65,7 +65,7 @@ public class InfluxDBReporter extends Reporter<InfluxDB> {
      * @param gauges A map of gauge names to values
      */
     @Override
-    public void recordGaugeValues(Map<String, ? extends Number> gauges) {
+    public void recordGaugeValues(Map<String, ? extends Number> gauges, String... tags) {
         long time = System.currentTimeMillis();
         BatchPoints batchPoints = BatchPoints.database(database).build();
         for (Map.Entry<String, ? extends Number> gauge: gauges.entrySet()) {

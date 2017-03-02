@@ -23,16 +23,16 @@ public class StatsDReporter extends Reporter<StatsDClient> {
      * @param value The value of the gauge
      */
     @Override
-    public void recordGaugeValue(String key, long value) {
-        client.recordGaugeValue(key, value);
+    public void recordGaugeValue(String key, long value, String... tags) {
+        client.recordGaugeValue(key, value, tags);
     }
 
   /**
    * @see #recordGaugeValue(String, long)
    */
     @Override
-    public void recordGaugeValue(String key, double value) {
-        client.recordGaugeValue(key, value);
+    public void recordGaugeValue(String key, double value, String... tags) {
+        client.recordGaugeValue(key, value, tags);
     }
 
     /**
@@ -42,12 +42,12 @@ public class StatsDReporter extends Reporter<StatsDClient> {
      * @param gauges A map of gauge names to values
      */
     @Override
-    public void recordGaugeValues(Map<String, ? extends Number> gauges) {
+    public void recordGaugeValues(Map<String, ? extends Number> gauges, String... tags) {
         for (Map.Entry<String, ? extends Number> gauge : gauges.entrySet()) {
           if (gauge.getValue() instanceof Long) {
-            client.recordGaugeValue(gauge.getKey(), gauge.getValue().longValue());
+            client.recordGaugeValue(gauge.getKey(), gauge.getValue().longValue(), tags);
           } else if (gauge.getValue() instanceof Double) {
-            client.recordGaugeValue(gauge.getKey(), gauge.getValue().doubleValue());
+            client.recordGaugeValue(gauge.getKey(), gauge.getValue().doubleValue(), tags);
           } else {
             throw new IllegalArgumentException("Unexpected Number type: " + gauge.getValue().getClass().getSimpleName());
           }

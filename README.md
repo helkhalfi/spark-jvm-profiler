@@ -1,6 +1,6 @@
-# statsd-jvm-profiler [![Build Status](https://travis-ci.org/etsy/statsd-jvm-profiler.svg)](https://travis-ci.org/etsy/statsd-jvm-profiler)
+# spark-jvm-profiler [![Build Status](https://travis-ci.org/datadog/spark-jvm-profiler.svg)](https://travis-ci.org/etsy/statsd-jvm-profiler)
 
-statsd-jvm-profiler is a JVM agent profiler that sends profiling data to StatsD.  Inspired by [riemann-jvm-profiler](https://github.com/riemann/riemann-jvm-profiler), it was primarily built for profiling Hadoop jobs, but can be used with any JVM process.
+spark-jvm-profiler is a JVM agent profiler that sends profiling data to StatsD.  Inspired by [riemann-jvm-profiler](https://github.com/riemann/riemann-jvm-profiler), it was primarily built for profiling Hadoop jobs, but can be used with any JVM process.
 
 Read [the blog post](https://codeascraft.com/2015/01/14/introducing-statsd-jvm-profiler-a-jvm-profiler-for-hadoop/) that introduced statsd-jvm-profiler on [Code as Craft](https://codeascraft.com/), Etsy's engineering blog.
 
