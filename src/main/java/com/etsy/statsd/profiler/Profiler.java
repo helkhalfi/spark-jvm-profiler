@@ -1,5 +1,5 @@
 package com.etsy.statsd.profiler;
-
+   
 import com.etsy.statsd.profiler.reporter.Reporter;
 import com.google.common.base.Preconditions;
 
